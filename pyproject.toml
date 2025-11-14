@@ -1,0 +1,38 @@
+[project]
+name = "pyflowetl"
+version = "1.0.0"
+description = "Un framework ETL modulare e leggibile in Python"
+authors = [
+    { name = "Marco Zamparelli", email = "marco.zamparelli@libero.it" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+license = { file = "LICENSE" }
+
+dependencies = [
+    "pandas",
+    "openpyxl",
+    "psutil",
+    "duckdb",
+    "openpyxl", 
+    "psutil",   
+    "metaphone",
+    "rapidfuzz",
+    "sqlalchemy",
+    "psycopg2",
+    "chardet",
+    "setuptools",
+    "cleanco",
+    "nameparser",
+    "spacy",
+    "unidecode",
+]
+
+[project.urls]
+Homepage = "https://github.com/valek77/pyflowetl_repo"
+Repository = "https://github.com/valek77/pyflowetl_repo"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
