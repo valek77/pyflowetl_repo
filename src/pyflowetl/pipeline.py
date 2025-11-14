@@ -1,9 +1,9 @@
 from copy import deepcopy
-from pyflowetl.log import get_logger, log_memory_usage
+from .log import get_logger, log_memory_usage
 import pandas as pd
 
-from pyflowetl.transformers.custom_sql_filter import CustomSqlFilterTransformer
-from pyflowetl.transformers.filter import FilterTransformer
+from .transformers.custom_sql_filter import CustomSqlFilterTransformer
+from .transformers.filter import FilterTransformer
 
 
 class EtlPipeline:
