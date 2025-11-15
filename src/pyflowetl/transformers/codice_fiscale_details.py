@@ -378,7 +378,7 @@ class AddCodiceFiscaleDetailsTransformer:
 
             # Mappatura su nazione: se non in elenco -> ITALIA
             country_series = birthplace_code.map(self.COUNTRY_MAP)
-            df.loc[mask_valid_len, col_nazione_nascita] = country_series.fillna("ITALIA")
+            df.loc[mask_valid_len, col_nazione_nascita] = country_series.fillna("Italia")
 
             # YY, M, GG
             yy = pd.to_numeric(cf_valid.str[6:8], errors="coerce")
