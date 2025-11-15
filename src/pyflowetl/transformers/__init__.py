@@ -26,8 +26,10 @@ from .text_replace import TextReplaceTransformer
 from .to_lower import ToLowerTransformer
 from .to_upper import ToUpperTransformer
 from .validate_columns import ValidateColumnsTransformer
+from .codice_fiscale_details import AddCodiceFiscaleDetailsTransformer
 
 __all__ = [
+    "AddCodiceFiscaleDetailsTransformer",
     "AddConstantColumnTransformer",
     "AddProvinciaRegioneFromCapTransformer",
     "AddProvinciaTransformer",
