@@ -34,6 +34,9 @@ class EtlPipeline:
         """
         return transformer.transform(self.data)
 
+    def df(self):
+        return self.data
+
     def sql_filter(self, filter_expression: str) -> "EtlPipeline":
         """
         Applica un filtro usando FilterTransformer e ritorna una NUOVA pipeline coi dati filtrati.
