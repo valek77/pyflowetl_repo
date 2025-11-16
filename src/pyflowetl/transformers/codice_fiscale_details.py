@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import numpy as np
 from datetime import date
@@ -11,17 +10,24 @@ class AddCodiceFiscaleDetailsTransformer:
     Transformer che, data una colonna con il codice fiscale italiano,
     aggiunge le colonne derivate:
 
-      - DATA_NASCITA
-      - ANNO_NASCITA
-      - MESE_NASCITA
-      - GIORNO_NASCITA
-      - SESSO
-      - ETA
-      - NAZIONE_CODICE   (codice catastale/nazione dal CF)
-      - NAZIONE_NASCITA  (ITALIA o nazione estera ricavata dai codici Z***)
+      - <prefix>DATA_NASCITA      (datetime64[ns])
+      - <prefix>ANNO_NASCITA      (int/float)
+      - <prefix>MESE_NASCITA      (int/float)
+      - <prefix>GIORNO_NASCITA    (int/float)
+      - <prefix>SESSO             ('M'/'F')
+      - <prefix>ETA               (int/float)
+      - <prefix>NAZIONE_CODICE    (codice luogo/nazione dal CF, es: Z404, H501, ...)
+      - <prefix>NAZIONE_NASCITA   (ITALIA o nazione estera, es: USA, Francia, ...)
 
-    Se il codice di nascita NON è in elenco (o non è del tipo Z***),
-    la NAZIONE_NASCITA viene impostata a 'ITALIA'.
+    Regole di validità:
+      - CF valido solo se lungo 16 caratteri
+      - mese, giorno, anno combinati danno una data valida
+      - se CF non valido -> tutte le colonne derivate sono NULL
+
+    Regole NAZIONE_NASCITA:
+      - se il codice di nascita è uno dei codici Z*** forniti -> nazione corrispondente
+      - se il codice NON è in elenco (tipicamente comune italiano) -> 'ITALIA'
+      - se il CF è invalido -> NAZIONE_NASCITA è NULL
     """
 
     MONTH_MAP = {
@@ -30,7 +36,6 @@ class AddCodiceFiscaleDetailsTransformer:
         "P": 9,  "R": 10, "S": 11, "T": 12,
     }
 
-    # Mappa codici Z*** -> nome nazione (o territorio)
     COUNTRY_MAP = {
         # EUROPA
         "Z100": "Albania",
@@ -346,10 +351,9 @@ class AddCodiceFiscaleDetailsTransformer:
         )
 
         mask_valid_len = cf_series.str.len() == 16
-        valid_count = mask_valid_len.sum()
         total_count = len(cf_series)
+        valid_len_count = mask_valid_len.sum()
 
-        # nomi colonne output
         col_data_nascita = self.output_prefix + "DATA_NASCITA"
         col_anno_nascita = self.output_prefix + "ANNO_NASCITA"
         col_mese_nascita = self.output_prefix + "MESE_NASCITA"
@@ -359,34 +363,26 @@ class AddCodiceFiscaleDetailsTransformer:
         col_nazione_codice = self.output_prefix + "NAZIONE_CODICE"
         col_nazione_nascita = self.output_prefix + "NAZIONE_NASCITA"
 
-        # inizializza colonne
+        # inizializza tutte le colonne a NULL
         df[col_data_nascita] = pd.NaT
-        df[col_anno_nascita] = np.nan
-        df[col_mese_nascita] = np.nan
-        df[col_giorno_nascita] = np.nan
-        df[col_sesso] = pd.NA
-        df[col_eta] = np.nan
-        df[col_nazione_codice] = pd.NA
-        df[col_nazione_nascita] = "ITALIA"
+        df[col_anno_nascita] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+        df[col_mese_nascita] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+        df[col_giorno_nascita] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+        df[col_sesso] = pd.Series(pd.NA, index=df.index, dtype="string")
+        df[col_eta] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+        df[col_nazione_codice] = pd.Series(pd.NA, index=df.index, dtype="string")
+        df[col_nazione_nascita] = pd.Series(pd.NA, index=df.index, dtype="string")
 
-        if valid_count > 0:
+        if valid_len_count > 0:
             cf_valid = cf_series[mask_valid_len]
 
-            # Codice luogo/nazione di nascita (posizioni 11-14)
-            birthplace_code = cf_valid.str[11:15]
-            df.loc[mask_valid_len, col_nazione_codice] = birthplace_code
-
-            # Mappatura su nazione: se non in elenco -> ITALIA
-            country_series = birthplace_code.map(self.COUNTRY_MAP)
-            df.loc[mask_valid_len, col_nazione_nascita] = country_series.fillna("Italia")
-
-            # YY, M, GG
+            # parti numeriche
             yy = pd.to_numeric(cf_valid.str[6:8], errors="coerce")
             month = cf_valid.str[8:9].map(self.MONTH_MAP).astype("float")
             day_gender_raw = pd.to_numeric(cf_valid.str[9:11], errors="coerce")
 
             # sesso
-            sex = pd.Series(pd.NA, index=cf_valid.index)
+            sex = pd.Series(pd.NA, index=cf_valid.index, dtype="string")
             sex.loc[day_gender_raw <= 40] = "M"
             sex.loc[day_gender_raw > 40] = "F"
 
@@ -394,7 +390,7 @@ class AddCodiceFiscaleDetailsTransformer:
             day = day_gender_raw.copy()
             day.loc[day_gender_raw > 40] = day_gender_raw.loc[day_gender_raw > 40] - 40
 
-            # secolo
+            # anno con secolo
             current_year = self.reference_date.year
             current_yy = current_year % 100
             base_century = current_year - current_yy
@@ -414,22 +410,81 @@ class AddCodiceFiscaleDetailsTransformer:
                 errors="coerce",
             )
 
-            # età
+            # maschera di CF con problemi interni (data impossibile, numeri mancanti, ecc.)
+            mask_invalid_internal = (
+                birth_date.isna() |
+                full_year.isna() |
+                month.isna() |
+                day.isna()
+            )
+
+            # validi davvero (lunghezza giusta + data coerente)
+            valid_final = pd.Series(False, index=df.index)
+            valid_final_on_subset = ~mask_invalid_internal
+            valid_final.loc[cf_valid.index] = valid_final_on_subset
+
+            # età solo per i validi
             ref_ts = pd.Timestamp(self.reference_date)
             age = ((ref_ts - birth_date).dt.days / 365.25).astype("float")
             age = np.floor(age)
 
-            # scrittura risultati
-            df.loc[mask_valid_len, col_data_nascita] = birth_date
-            df.loc[mask_valid_len, col_anno_nascita] = full_year
-            df.loc[mask_valid_len, col_mese_nascita] = month
-            df.loc[mask_valid_len, col_giorno_nascita] = day
-            df.loc[mask_valid_len, col_sesso] = sex
-            df.loc[mask_valid_len, col_eta] = age
+            # codice luogo/nazione
+            birthplace_code = cf_valid.str[11:15]
+            country_series = birthplace_code.map(self.COUNTRY_MAP)
 
+            # scrivi risultati solo sui validi
+            valid_idx = valid_final[valid_final].index
+            valid_idx_on_subset = valid_final_on_subset[valid_final_on_subset].index
+
+            df.loc[valid_idx, col_data_nascita] = birth_date.loc[valid_idx_on_subset]
+            df.loc[valid_idx, col_anno_nascita] = full_year.loc[valid_idx_on_subset].astype("Float64")
+            df.loc[valid_idx, col_mese_nascita] = month.loc[valid_idx_on_subset].astype("Float64")
+            df.loc[valid_idx, col_giorno_nascita] = day.loc[valid_idx_on_subset].astype("Float64")
+            df.loc[valid_idx, col_sesso] = sex.loc[valid_idx_on_subset]
+
+            df.loc[valid_idx, col_eta] = age.loc[valid_idx_on_subset].astype("Float64")
+            df.loc[valid_idx, col_nazione_codice] = birthplace_code.loc[valid_idx_on_subset]
+
+            # NAZIONE_NASCITA: mappa Z***, altrimenti ITALIA
+            mapped_country = country_series.fillna("ITALIA")
+            df.loc[valid_idx, col_nazione_nascita] = mapped_country.loc[valid_idx_on_subset]
+
+            invalid_total = total_count - len(valid_idx)
             self.logger.info(
-                f"[AddCodiceFiscaleDetailsTransformer] CF validi (16 char): {valid_count}/{total_count}"
+                f"[AddCodiceFiscaleDetailsTransformer] Righe totali: {total_count}, "
+                f"CF con len=16: {valid_len_count}, CF validi (data ok): {len(valid_idx)}, "
+                f"CF invalidi: {invalid_total}"
+            )
+        else:
+            self.logger.warning(
+                "[AddCodiceFiscaleDetailsTransformer] Nessun CF lungo 16 caratteri; "
+                "tutte le colonne derivate rimangono NULL."
             )
 
         log_memory_usage("[AddCodiceFiscaleDetailsTransformer] post-transform")
         return df
+
+
+# -----------------------------------------------------------
+# Esempio di utilizzo
+# -----------------------------------------------------------
+if __name__ == "__main__":
+    data = {
+        "CODICE_FISCALE": [
+            "RSSMRA85M01Z404X",  # CF fittizio con codice Z404 (USA)
+            "BNCLGU03A15H501Y",  # CF fittizio con codice H501 (comune italiano -> ITALIA)
+            "XXXXXXXXXXXXXXX",   # 15 caratteri -> CF non valido -> tutto NULL
+            "RSSMRA85Z99H501X",  # mese 'Z' impossibile -> CF non valido -> tutto NULL
+            None,                # NULL -> CF non valido
+        ]
+    }
+    df_example = pd.DataFrame(data)
+
+    transformer = AddCodiceFiscaleDetailsTransformer(
+        cf_column="CODICE_FISCALE",
+        output_prefix="CF_",
+        # reference_date=date(2025, 1, 1),  # opzionale
+    )
+
+    df_out = transformer.transform(df_example)
+    print(df_out)
