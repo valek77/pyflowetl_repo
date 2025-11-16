@@ -1,6 +1,6 @@
 [project]
 name = "pyflowetl"
-version = "1.0.7"
+version = "1.0.8"
 description = "Un framework ETL modulare e leggibile in Python"
 authors = [
     { name = "Marco Zamparelli", email = "marco.zamparelli@libero.it" }
