@@ -3938,6 +3938,7 @@ Collecchio;43044;PR;Parma;Emilia-Romagna
 Colorno;43052;PR;Parma;Emilia-Romagna
 Compiano;43053;PR;Parma;Emilia-Romagna
 Corniglio;43021;PR;Parma;Emilia-Romagna
+Beduzzo;43020;PR;Parma;Emilia-Romagna
 Felino;43035;PR;Parma;Emilia-Romagna
 Fidenza;43036;PR;Parma;Emilia-Romagna
 Fontanellato;43012;PR;Parma;Emilia-Romagna
@@ -4155,6 +4156,8 @@ Ferrara;44121;FE;Ferrara;Emilia-Romagna
 Ferrara;44122;FE;Ferrara;Emilia-Romagna
 Ferrara;44123;FE;Ferrara;Emilia-Romagna
 Ferrara;44124;FE;Ferrara;Emilia-Romagna
+Mirabello;44043;FE;Ferrara;Emilia-Romagna
+Cento;44045;FE;Ferrara;Emilia-Romagna
 Jolanda di Savoia;44037;FE;Ferrara;Emilia-Romagna
 Lagosanto;44023;FE;Ferrara;Emilia-Romagna
 Masi Torello;44020;FE;Ferrara;Emilia-Romagna
@@ -4489,6 +4492,7 @@ Chiesina Uzzanese;51013;PT;Pistoia;Toscana
 Abetone Cutigliano;51024;PT;Pistoia;Toscana
 San Marcello Piteglio;51028;PT;Pistoia;Toscana
 Bagno a Ripoli;50012;FI;Firenze;Toscana
+Caldine;50010;FI;Firenze;Toscana
 Barberino di Mugello;50031;FI;Firenze;Toscana
 Borgo San Lorenzo;50032;FI;Firenze;Toscana
 Calenzano;50041;FI;Firenze;Toscana
@@ -4539,6 +4543,7 @@ Reggello;50066;FI;Firenze;Toscana
 Rignano sull'Arno;50067;FI;Firenze;Toscana
 Rufina;50068;FI;Firenze;Toscana
 San Casciano in Val di Pesa;50026;FI;Firenze;Toscana
+San Casciano in Val di Pesa;50020;FI;Firenze;Toscana
 San Godenzo;50060;FI;Firenze;Toscana
 Scandicci;50018;FI;Firenze;Toscana
 Sesto Fiorentino;50019;FI;Firenze;Toscana
@@ -4622,6 +4627,7 @@ Crespina Lorenzana;56042;PI;Pisa;Toscana
 Anghiari;52031;AR;Arezzo;Toscana
 Arezzo;52100;AR;Arezzo;Toscana
 Badia Tedalda;52032;AR;Arezzo;Toscana
+Badia Tedalda;52030;AR;Arezzo;Toscana
 Bibbiena;52011;AR;Arezzo;Toscana
 Bucine;52021;AR;Arezzo;Toscana
 Capolona;52010;AR;Arezzo;Toscana
@@ -4705,6 +4711,7 @@ Isola del Giglio;58012;GR;Grosseto;Toscana
 Magliano in Toscana;58051;GR;Grosseto;Toscana
 Manciano;58014;GR;Grosseto;Toscana
 Massa Marittima;58024;GR;Grosseto;Toscana
+Massa Marittima;58040;GR;Grosseto;Toscana
 Monte Argentario;58019;GR;Grosseto;Toscana
 Montieri;58026;GR;Grosseto;Toscana
 Orbetello;58015;GR;Grosseto;Toscana
@@ -4742,6 +4749,7 @@ Giano dell'Umbria;06030;PG;Perugia;Umbria
 Gualdo Cattaneo;06035;PG;Perugia;Umbria
 Gualdo Tadino;06023;PG;Perugia;Umbria
 Gubbio;06024;PG;Perugia;Umbria
+Branca;06020;PG;Perugia;Umbria
 Lisciano Niccone;06060;PG;Perugia;Umbria
 Magione;06063;PG;Perugia;Umbria
 Marsciano;06055;PG;Perugia;Umbria
@@ -5125,6 +5133,7 @@ Sambuci;00020;RM;Roma;Lazio
 San Gregorio da Sassola;00010;RM;Roma;Lazio
 San Polo dei Cavalieri;00010;RM;Roma;Lazio
 Santa Marinella;00058;RM;Roma;Lazio
+Santa Marinella;00050;RM;Roma;Lazio
 Sant'Angelo Romano;00010;RM;Roma;Lazio
 Sant'Oreste;00060;RM;Roma;Lazio
 San Vito Romano;00030;RM;Roma;Lazio
@@ -6408,6 +6417,8 @@ Cellino San Marco;72020;BR;Brindisi;Puglia
 Cisternino;72014;BR;Brindisi;Puglia
 Erchie;72020;BR;Brindisi;Puglia
 Fasano;72015;BR;Brindisi;Puglia
+Fasano;72016;BR;Brindisi;Puglia
+Fasano;72010;BR;Brindisi;Puglia
 Francavilla Fontana;72021;BR;Brindisi;Puglia
 Latiano;72022;BR;Brindisi;Puglia
 Mesagne;72023;BR;Brindisi;Puglia
@@ -7839,6 +7850,8 @@ Ailoche;13861;BI;Biella;Piemonte
 Andorno Micca;13811;BI;Biella;Piemonte
 Benna;13871;BI;Biella;Piemonte
 Biella;13900;BI;Biella;Piemonte
+Soprana;13834;BI;Biella;Piemonte
+Campore;13825;BI;Biella;Piemonte
 Bioglio;13841;BI;Biella;Piemonte
 Borriana;13872;BI;Biella;Piemonte
 Brusnengo;13862;BI;Biella;Piemonte
@@ -8461,6 +8474,7 @@ La Spezia;19100;SP;La Spezia;Liguria
 Porto Ercole;58018;GR;Grosseto;Toscana
 Montepiano;59026;PO;Prato;Toscana
 Massa Finalese;41035;MO;Modena;Emilia-Romagna
+Limidi;41010;MO;Modena;Emilia-Romagna
 Como;22027;CO;Como;Lombardia
 Roma;00011;RM;Roma Capitale;Lazio
 Cavaglio-Spoccia;28825;VB;Verbano-Cusio-Ossola;Piemonte
