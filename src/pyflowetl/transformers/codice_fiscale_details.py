@@ -446,7 +446,7 @@ class AddCodiceFiscaleDetailsTransformer:
             df.loc[valid_idx, col_nazione_codice] = birthplace_code.loc[valid_idx_on_subset]
 
             # NAZIONE_NASCITA: mappa Z***, altrimenti ITALIA
-            mapped_country = country_series.fillna("ITALIA")
+            mapped_country = country_series.fillna("Italia")
             df.loc[valid_idx, col_nazione_nascita] = mapped_country.loc[valid_idx_on_subset]
 
             invalid_total = total_count - len(valid_idx)

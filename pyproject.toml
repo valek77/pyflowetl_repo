@@ -25,6 +25,7 @@ dependencies = [
     "nameparser",
     "spacy",
     "unidecode",
+    "requests",
 ]
 
 [project.urls]
