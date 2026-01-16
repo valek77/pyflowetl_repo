@@ -1,6 +1,6 @@
 [project]
 name = "pyflowetl"
-version = "1.1.2"
+version = "1.1.3"
 description = "Un framework ETL modulare e leggibile in Python"
 authors = [
     { name = "Marco Zamparelli", email = "marco.zamparelli@libero.it" }
@@ -26,6 +26,7 @@ dependencies = [
     "spacy",
     "unidecode",
     "requests",
+    "clickhouse-driver>=0.2.10",
 ]
 
 [project.urls]
