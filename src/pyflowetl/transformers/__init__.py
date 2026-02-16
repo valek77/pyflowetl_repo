@@ -2,6 +2,7 @@ from .add_constant_column import AddConstantColumnTransformer
 from .add_provincia import AddProvinciaTransformer
 from .add_provincia_regione_from_cap import AddProvinciaRegioneFromCapTransformer
 from .add_random_ip import AddRandomIpTransformer
+from .add_random_string import AddRandomStringTransformer
 from .add_ranom_date import AddRandomDatetimeTransformer
 from .add_regione import AddRegioneTransformer
 from .add_regione_from_sigla import AddRegioneFromSiglaProvinciaTransformer
@@ -35,6 +36,7 @@ __all__ = [
     "AddProvinciaTransformer",
     "AddRandomDatetimeTransformer",
     "AddRandomIpTransformer",
+    "AddRandomStringTransformer",
     "AddRegioneFromSiglaProvinciaTransformer",
     "AddRegioneTransformer",
     "ApplyPreprocessingRulesTransformer",
