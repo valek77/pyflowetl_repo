@@ -1,3 +1,4 @@
+from .add_cap_from_comune import AddCapFromComuneTransformer
 from .add_constant_column import AddConstantColumnTransformer
 from .add_provincia import AddProvinciaTransformer
 from .add_provincia_regione_from_cap import AddProvinciaRegioneFromCapTransformer
@@ -30,6 +31,7 @@ from .validate_columns import ValidateColumnsTransformer
 from .codice_fiscale_details import AddCodiceFiscaleDetailsTransformer
 
 __all__ = [
+    "AddCapFromComuneTransformer",
     "AddCodiceFiscaleDetailsTransformer",
     "AddConstantColumnTransformer",
     "AddProvinciaRegioneFromCapTransformer",
